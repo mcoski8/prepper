@@ -10,8 +10,8 @@ pypdf>=3.17.0
 python-magic>=0.4.27
 Pillow>=10.0.0
 
-# ZIM file handling (optional - for advanced processing)
-# zimply>=0.1.0
+# ZIM file handling
+pyzim>=3.0.0
 
 # Data processing
 pandas>=2.1.0

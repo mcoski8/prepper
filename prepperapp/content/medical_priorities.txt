@@ -1,0 +1,127 @@
+# Medical Priority Keywords for PrepperApp
+# Format: keyword|priority (0=critical, 1=important, 2=useful)
+# Keywords are case-insensitive and matched against article titles and first paragraphs
+
+# Priority 0 - Life-threatening emergencies (must be in core app)
+hemorrhage|0
+bleeding control|0
+tourniquet|0
+pressure point|0
+arterial bleeding|0
+massive bleeding|0
+exsanguination|0
+airway obstruction|0
+choking|0
+heimlich maneuver|0
+cardiac arrest|0
+CPR|0
+cardiopulmonary resuscitation|0
+chest compression|0
+anaphylaxis|0
+anaphylactic shock|0
+epinephrine|0
+epipen|0
+severe allergic|0
+shock|0
+hypovolemic shock|0
+hypothermia|0
+hyperthermia|0
+heat stroke|0
+frostbite|0
+drowning|0
+asphyxiation|0
+
+# Priority 1 - Important medical procedures
+fracture|1
+broken bone|1
+splint|1
+immobilization|1
+dislocation|1
+sprain|1
+burn treatment|1
+first degree burn|1
+second degree burn|1
+third degree burn|1
+wound care|1
+infection prevention|1
+antiseptic|1
+antibiotic|1
+suture|1
+stitches|1
+wound closure|1
+dehydration|1
+oral rehydration|1
+electrolyte|1
+poisoning|1
+overdose|1
+antidote|1
+snake bite|1
+spider bite|1
+rabies|1
+tetanus|1
+concussion|1
+head injury|1
+spinal injury|1
+pneumothorax|1
+tension pneumothorax|1
+diabetic emergency|1
+hypoglycemia|1
+hyperglycemia|1
+seizure|1
+epilepsy|1
+stroke|1
+heart attack|1
+myocardial infarction|1
+asthma attack|1
+allergic reaction|1
+
+# Priority 2 - General medical knowledge
+fever|2
+pain management|2
+inflammation|2
+antibiotics|2
+vaccination|2
+immunization|2
+blood pressure|2
+hypertension|2
+hypotension|2
+pulse|2
+vital signs|2
+bandage|2
+dressing|2
+gauze|2
+medical tape|2
+sling|2
+crutches|2
+medication dosage|2
+drug interaction|2
+contraindication|2
+side effect|2
+first aid kit|2
+medical supplies|2
+emergency medicine|2
+wilderness medicine|2
+field medicine|2
+combat medicine|2
+tactical medicine|2
+mass casualty|2
+triage|2
+disaster medicine|2
+pandemic|2
+epidemic|2
+quarantine|2
+isolation|2
+personal protective|2
+ppe|2
+sanitation|2
+hygiene|2
+water purification|2
+food safety|2
+nutrition|2
+malnutrition|2
+vitamin deficiency|2
+pregnancy|2
+childbirth|2
+emergency delivery|2
+pediatric emergency|2
+geriatric emergency|2

@@ -1,0 +1,24 @@
+# PrepperApp Content Processing Requirements
+
+# Core dependencies
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Content processing
+pypdf>=3.17.0
+python-magic>=0.4.27
+Pillow>=10.0.0
+
+# ZIM file handling (optional - for advanced processing)
+# zimply>=0.1.0
+
+# Data processing
+pandas>=2.1.0
+numpy>=1.24.0
+
+# Progress bars
+tqdm>=4.66.0
+
+# JSON processing
+jsonlines>=4.0.0

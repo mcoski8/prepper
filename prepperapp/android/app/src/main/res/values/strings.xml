@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">PrepperApp</string>
+    <string name="search_hint">Search survival knowledge...</string>
+    <string name="empty_state_text">Search for critical survival information</string>
+    <string name="emergency_mode">Emergency Mode</string>
+    <string name="emergency_mode_message">This will optimize the display for emergency situations with larger text and essential info only.</string>
+    <string name="enable">Enable</string>
+    <string name="cancel">Cancel</string>
+    <string name="error_search_failed">Search failed. Please try again.</string>
+</resources>

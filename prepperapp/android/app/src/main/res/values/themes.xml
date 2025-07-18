@@ -1,0 +1,40 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme -->
+    <style name="Theme.PrepperApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@android:color/black</item>
+        <item name="colorPrimaryVariant">@android:color/black</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@android:color/white</item>
+        <item name="colorSecondaryVariant">@android:color/white</item>
+        <item name="colorOnSecondary">@android:color/black</item>
+        
+        <!-- Status bar color -->
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/black</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+        
+        <!-- Force dark theme -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">#B3FFFFFF</item>
+        <item name="android:textColorHint">#80FFFFFF</item>
+        
+        <!-- Window settings -->
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+        
+        <!-- Toolbar theme -->
+        <item name="toolbarStyle">@style/Widget.PrepperApp.Toolbar</item>
+    </style>
+    
+    <style name="Widget.PrepperApp.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@android:color/black</item>
+        <item name="titleTextColor">@android:color/white</item>
+        <item name="navigationIconTint">@android:color/white</item>
+    </style>
+</resources>

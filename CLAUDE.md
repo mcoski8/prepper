@@ -89,6 +89,12 @@ npm run build:android
 - Tantivy: https://github.com/quickwit-oss/tantivy
 - Kiwix (ZIM reader): https://github.com/kiwix/kiwix-lib
 
+## Content Acquisition
+For external content that needs to be downloaded (Wikipedia, maps, medical guides, etc.), see:
+- **Content Acquisition Guide**: `/docs/content/content-acquisition.md`
+- This file tracks all external downloads needed, with instructions for both automated and manual acquisition
+- Check this file regularly for content download status and blockers
+
 ## AI Assistant Notes
 When working on this project:
 1. Always consider battery impact of any feature

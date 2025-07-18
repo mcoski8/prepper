@@ -8,13 +8,11 @@ fn main() {
         .display()
         .to_string();
 
-    let config = cbindgen::Config {
-        language: cbindgen::Language::C,
-        ..Default::default()
-    };
-
-    cbindgen::generate_with_config(&crate_dir, config)
-        .unwrap()
+    cbindgen::Builder::new()
+        .with_crate(crate_dir)
+        .with_language(cbindgen::Language::C)
+        .generate()
+        .expect("Unable to generate bindings")
         .write_to_file(&output_file);
 
     println!("cargo:rerun-if-changed=src/lib.rs");

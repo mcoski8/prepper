@@ -16,9 +16,9 @@ import shutil
 from typing import List, Dict, Tuple, Set
 
 try:
-    import pyzim
+    import libzim
 except ImportError:
-    print("Error: pyzim not installed. Please run: pip3 install pyzim")
+    print("Error: libzim not installed. Please run: pip3 install libzim")
     sys.exit(1)
 
 class CuratedZIMExtractor:
@@ -104,13 +104,11 @@ class CuratedZIMExtractor:
         
         return content.strip()
     
-    def extract_article(self, zim_file, entry, priority: int, matched_keywords: List[str]) -> Dict:
+    def extract_article(self, zim_file, item, priority: int, matched_keywords: List[str]) -> Dict:
         """Extract and process a single article"""
         try:
             # Get article content
-            content = entry.read()
-            if isinstance(content, bytes):
-                content = content.decode('utf-8', errors='ignore')
+            content = bytes(item.content).decode('utf-8', errors='ignore')
             
             # Clean content
             cleaned_content = self.clean_content(content)
@@ -121,12 +119,12 @@ class CuratedZIMExtractor:
                 summary += "..."
             
             # Create article metadata
-            article_id = hashlib.md5(f"{priority}:{entry.title}".encode()).hexdigest()[:12]
+            article_id = hashlib.md5(f"{priority}:{item.title}".encode()).hexdigest()[:12]
             
             article_data = {
                 "id": article_id,
-                "title": entry.title,
-                "url": entry.url,
+                "title": item.title,
+                "url": item.path,
                 "priority": priority,
                 "matched_keywords": matched_keywords,
                 "summary": summary,
@@ -137,15 +135,15 @@ class CuratedZIMExtractor:
             # Save content to temp directory
             article_path = self.temp_dir / f"{article_id}.html"
             with open(article_path, 'w', encoding='utf-8') as f:
-                f.write(f"<html><head><title>{entry.title}</title></head><body>")
-                f.write(f"<h1>{entry.title}</h1>")
+                f.write(f"<html><head><title>{item.title}</title></head><body>")
+                f.write(f"<h1>{item.title}</h1>")
                 f.write(cleaned_content)
                 f.write("</body></html>")
             
             return article_data
             
         except Exception as e:
-            print(f"Error extracting {entry.title}: {e}")
+            print(f"Error extracting {item.title}: {e}")
             return None
     
     def process_zim_file(self, zim_path: str) -> List[Dict]:
@@ -154,11 +152,11 @@ class CuratedZIMExtractor:
         
         extracted_articles = []
         
-        with pyzim.Zim.open(zim_path) as zim:
+        with libzim.Archive(zim_path) as zim:
             print(f"ZIM file opened. Starting extraction...")
             
             # Iterate through entries
-            for entry in zim.entries():
+            for entry in zim:
                 self.stats["total_scanned"] += 1
                 
                 # Progress indicator
@@ -171,34 +169,32 @@ class CuratedZIMExtractor:
                     continue
                 
                 # Skip non-article entries
-                if not entry.url.startswith('A/'):
+                if not entry.path.startswith('A/'):
                     continue
                 
-                # Get resolved entry
+                # Get item from entry
                 try:
-                    resolved_entry = entry.resolve()
+                    item = entry.get_item()
                 except:
-                    resolved_entry = entry
+                    continue
                 
                 # Get content preview for assessment
                 try:
-                    content_preview = resolved_entry.read()
-                    if isinstance(content_preview, bytes):
-                        content_preview = content_preview.decode('utf-8', errors='ignore')
+                    content_preview = bytes(item.content).decode('utf-8', errors='ignore')
                     content_preview = content_preview[:2000]  # First 2KB
                 except:
                     continue
                 
                 # Assess priority
                 priority, matched_keywords = self.assess_priority(
-                    resolved_entry.title, 
+                    item.title, 
                     content_preview
                 )
                 
                 if priority >= 0:
                     # Extract article
                     article_data = self.extract_article(
-                        zim, resolved_entry, priority, matched_keywords
+                        zim, item, priority, matched_keywords
                     )
                     
                     if article_data:

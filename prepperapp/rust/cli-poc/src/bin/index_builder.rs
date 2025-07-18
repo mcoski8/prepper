@@ -1,9 +1,8 @@
 use anyhow::Result;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::path::Path;
 use tantivy::schema::*;
-use tantivy::{doc, Index, IndexWriter, DateTime};
+use tantivy::{doc, Index, IndexWriter, DateTime, TantivyDocument};
 
 fn main() -> Result<()> {
     let args: Vec<String> = std::env::args().collect();
@@ -67,7 +66,12 @@ fn main() -> Result<()> {
                 let medical_terms = extract_medical_terms(&title, &content);
                 
                 // Use current timestamp for last_modified
-                let last_modified = DateTime::now();
+                let last_modified = DateTime::from_timestamp_secs(
+                    std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .unwrap()
+                        .as_secs() as i64
+                );
                 
                 // Create document - note: content goes to "body" field and is NOT stored
                 let doc = doc!(
@@ -152,7 +156,6 @@ fn extract_medical_terms(title: &str, content: &str) -> String {
 fn test_search(index: &Index) -> Result<()> {
     use tantivy::collector::TopDocs;
     use tantivy::query::QueryParser;
-    use tantivy::IndexReader;
     
     let reader = index.reader()?;
     let searcher = reader.searcher();
@@ -174,10 +177,13 @@ fn test_search(index: &Index) -> Result<()> {
         println!("\nQuery '{}' returned {} results:", query_str, top_docs.len());
         
         for (score, doc_address) in top_docs {
-            let doc = searcher.doc(doc_address)?;
-            let title = doc.get_first(schema.get_field("title").unwrap())
-                .and_then(|v| v.as_text())
-                .unwrap_or("N/A");
+            let doc: TantivyDocument = searcher.doc(doc_address)?;
+            let title_field = schema.get_field("title").expect("Title field not in schema");
+            let title = if let Some(title_val) = doc.get_first(title_field) {
+                title_val.as_str().unwrap_or("N/A")
+            } else {
+                "N/A"
+            };
             println!("  - {} (score: {:.2})", title, score);
         }
     }

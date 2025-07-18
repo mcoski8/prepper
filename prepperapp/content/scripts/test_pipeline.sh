@@ -36,13 +36,13 @@ if ! command -v cargo &> /dev/null; then
 fi
 echo -e "${GREEN}✓ Cargo found${NC}"
 
-# Check pyzim
-if ! python3 -c "import pyzim" 2>/dev/null; then
-    echo -e "${RED}✗ pyzim not installed${NC}"
-    echo "  Installing pyzim..."
-    pip3 install pyzim
+# Check libzim
+if ! python3 -c "import libzim" 2>/dev/null; then
+    echo -e "${RED}✗ libzim not installed${NC}"
+    echo "  Installing libzim..."
+    pip3 install libzim
 fi
-echo -e "${GREEN}✓ pyzim available${NC}"
+echo -e "${GREEN}✓ libzim available${NC}"
 
 # Optional: Check zimwriterfs
 if command -v zimwriterfs &> /dev/null; then
@@ -50,6 +50,7 @@ if command -v zimwriterfs &> /dev/null; then
 else
     echo -e "${RED}✗ zimwriterfs not found (optional)${NC}"
     echo "  Note: ZIM creation will be skipped"
+    echo "  You can install with: brew install zim-tools (macOS) or apt-get install zim-tools (Linux)"
 fi
 
 echo
@@ -150,7 +151,7 @@ echo -e "${GREEN}✓ Created test JSONL with 3 articles${NC}"
 echo
 echo "4. Building Tantivy index..."
 
-cd "$PROJECT_ROOT/rust/cli-poc"
+cd "$PROJECT_ROOT/prepperapp/rust/cli-poc"
 
 # Build the indexer
 echo "  Building index_builder..."

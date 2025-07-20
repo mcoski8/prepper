@@ -1,0 +1,174 @@
+# PrepperApp .gitignore
+
+# Content Files (NEVER commit these - they're too large)
+*.zim
+*.zim.torrent
+*.osm
+*.osm.pbf
+*.mbtiles
+data/zim/
+data/maps/
+data/content/
+downloads/
+content-downloads/
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# IDE Files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+
+# Build Artifacts
+build/
+dist/
+out/
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.apk
+*.aab
+*.ipa
+*.app
+*.dSYM
+*.framework
+xcuserdata/
+*.xcworkspace/
+DerivedData/
+
+# Node/NPM (for build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Python (for scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Rust/Cargo (for Tantivy)
+Cargo.lock
+target/
+**/*.rs.bk
+
+# Android
+*.iml
+.gradle/
+local.properties
+.externalNativeBuild
+.cxx
+captures/
+.navigation/
+*.jks
+*.keystore
+
+# iOS
+Pods/
+Podfile.lock
+*.xcuserstate
+*.xcscmblueprint
+*.xcscheme
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Test Coverage
+coverage/
+*.lcov
+.nyc_output/
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+
+# Database Files (if any)
+*.db
+*.sqlite
+*.sqlite3
+
+# Compressed Archives (except specific allowed ones)
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+# Allow specific documentation archives if needed
+# !docs/reference/*.zip
+
+# Private/Sensitive Files
+*.env
+*.env.local
+*.env.*.local
+secrets/
+credentials/
+*.pem
+*.key
+*.cert
+*.p12
+
+# Large Media Files (unless specifically needed)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+# Allow specific instructional videos if needed
+# !data/videos/emergency-procedures/*.mp4
+
+# Documentation Build
+docs/_build/
+docs/.doctrees/
+site/
+
+# Miscellaneous
+.cache/
+.parcel-cache/
+.nuxt/
+.next/
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+.venv/
+.env.test

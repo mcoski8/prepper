@@ -3,6 +3,15 @@
 ## Overview
 This document tracks all external content that needs to be downloaded or acquired for PrepperApp. It includes both automated downloads (that Claude can handle) and manual acquisitions (requiring human intervention).
 
+## ⚠️ IMPORTANT: Git Exclusions
+All content files are excluded from Git version control due to their large size. The `.gitignore` file is configured to exclude:
+- All `.zim` files (Wikipedia, medical references)
+- All map data (`.osm`, `.pbf`, `.mbtiles`)
+- The entire `data/` directory structure
+- Download directories
+
+**Never attempt to commit content files to Git!** They should be downloaded locally for development but kept out of version control.
+
 ## Quick Status
 - ✅ = Downloaded and processed
 - 📥 = Ready for automated download

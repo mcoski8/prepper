@@ -1,0 +1,25 @@
+{
+  "content_directory": "/Volumes/Vid SSD/PrepperApp-Content",
+  "fallback_directories": [
+    "/Volumes/easystore/PrepperApp-Content",
+    "$HOME/PrepperApp-Content"
+  ],
+  "description": "Primary location for all PrepperApp offline content (~220GB)",
+  "requirements": {
+    "minimum_free_space_gb": 250,
+    "expected_total_size_gb": 220
+  },
+  "content_structure": {
+    "wikipedia": "Complete Wikipedia with images (87GB)",
+    "medical": "Medical references and guides (15GB)",
+    "survival": "Survival manuals and skills (10GB)",
+    "plants": "Plant identification guides (5GB)",
+    "maps": "OpenStreetMap US data (50GB)",
+    "repair": "Repair and building guides (10GB)",
+    "homestead": "Homesteading and agriculture (5GB)",
+    "comms": "Communications guides (2GB)",
+    "reference": "Reference library and eBooks (20GB)",
+    "family": "Family and child care (5GB)",
+    "pharma": "Pharmaceutical reference and pill ID (3GB)"
+  }
+}

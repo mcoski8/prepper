@@ -2,15 +2,29 @@
 
 Offline-first survival knowledge base for iOS and Android. Designed to work with zero connectivity during emergencies.
 
-## Project Status: Sprint 1 Complete ✅
+## Project Status: Content Downloads Active 🔄
 
 ### Completed Features
 - ✅ Rust-based Tantivy search engine with <100ms performance
-- ✅ Native iOS app (Swift) with emergency-optimized UI
-- ✅ Native Android app (Kotlin) with OLED black theme
-- ✅ FFI/JNI bridges for cross-platform search
-- ✅ Content acquisition pipeline for real survival data
-- ✅ Smart categorization and priority system
+- ✅ Content extraction pipeline (29,972 medical articles)
+- ✅ Mobile-optimized bundle: **249MB** (P0 critical content)
+- ✅ Search safety validation framework
+- ✅ Automated deployment packaging
+- ✅ 88% index size reduction using Basic indexing
+- ✅ Pill identification database (46,872 FDA products)
+- ✅ External storage support for 220GB+ content
+
+### In Progress
+**Content Downloads**: Acquiring ~220GB of comprehensive survival content
+- Wikipedia (Full): 87GB 
+- Medical References: 15GB
+- Maps, Survival Guides, Reference Library: 118GB
+- Progress: ~2.8GB downloaded (1.3%)
+
+### Latest Achievement
+**Two-Tier Architecture**: 
+- Tier 1: 249MB core app (fits on any phone)
+- Tier 2: 220GB+ external storage modules (SD card/USB)
 
 ## Project Structure
 
@@ -37,42 +51,42 @@ prepperapp/
 ## Quick Start
 
 ### Prerequisites
-- Rust toolchain with mobile targets
-- Xcode 14+ (iOS)
-- Android Studio (Android)
-- Python 3.8+ (content processing)
+- Python 3.8+ with libzim
+- Rust toolchain (optional, for custom builds)
+- ~5GB disk space for full extraction
 
-### 1. Build Rust Libraries
-
-```bash
-# iOS
-cd scripts
-./build-ios-lib.sh
-
-# Android
-export ANDROID_NDK_HOME=/path/to/ndk
-./build-android-lib.sh
-```
-
-### 2. Download Real Content
+### 1. Extract Medical Content
 
 ```bash
-cd content/scripts
-pip3 install -r requirements.txt
-./download_all.sh
+# Run the full pipeline (takes ~3 minutes)
+./SPRINT5_RUNNER.sh
+
+# Or just P0 content for mobile
+./P0_ONLY_EXTRACT.sh
 ```
 
-### 3. Build & Run Apps
+### 2. Build Mobile Bundle
+
+```bash
+# Create mobile-optimized index
+./P0_MOBILE_OPTIMIZED.sh
+
+# Test search safety
+./RUN_SEARCH_SAFETY_TEST.sh
+
+# Package for deployment
+./PACKAGE_P0_MOBILE.sh
+```
+
+### 3. Deploy to Mobile
 
 **iOS:**
-1. Open `ios/` in Xcode
-2. Add `libtantivy_mobile.a` to project
-3. Build and run
+- Include `prepperapp-p0-v1.0.0` bundle in app resources
+- Extract on first launch to Documents directory
 
 **Android:**
-1. Open `android/` in Android Studio
-2. Sync Gradle
-3. Build and run
+- Add `prepperapp-p0-v1.0.0.zip` to assets
+- Extract to app files directory on first launch
 
 ## Architecture
 

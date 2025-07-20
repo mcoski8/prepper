@@ -37,6 +37,10 @@ struct Args {
     /// Index writer heap size in MB (default: 500)
     #[arg(short = 'm', long, default_value = "500")]
     heap_size: usize,
+    
+    /// Finalize the index by merging all segments into one (for read-only deployment)
+    #[arg(long)]
+    finalize: bool,
 }
 
 fn main() -> Result<()> {
@@ -154,6 +158,46 @@ fn main() -> Result<()> {
     
     let commit_duration = commit_start.elapsed();
     println!("Commit completed in {:.2}s", commit_duration.as_secs_f64());
+
+    // 5a. Finalize index if requested
+    if args.finalize {
+        println!("\nFinalizing index: merging segments...");
+        let merge_start = std::time::Instant::now();
+        
+        // Get all segment IDs
+        let segment_ids: Vec<_> = index
+            .reader()?
+            .searcher()
+            .segment_readers()
+            .iter()
+            .map(|segment_reader| segment_reader.segment_id())
+            .collect();
+        
+        if !segment_ids.is_empty() {
+            println!("Found {} segments to merge", segment_ids.len());
+            
+            // The merge call is async, so we need to block on it
+            let merge_future = index_writer.merge(&segment_ids);
+            futures::executor::block_on(merge_future)?;
+            
+            // Commit the merge
+            index_writer.commit()?;
+            
+            println!("✓ Segments merged.");
+            
+            // Run garbage collection to remove old segment files
+            println!("Running garbage collection...");
+            let gc_future = index_writer.garbage_collect_files();
+            futures::executor::block_on(gc_future)?;
+            
+            println!("✓ Garbage collection complete.");
+            
+            let merge_duration = merge_start.elapsed();
+            println!("Finalization completed in {:.2}s", merge_duration.as_secs_f64());
+        } else {
+            println!("No segments to merge.");
+        }
+    }
 
     // 6. Report final statistics
     let index_reader = index.reader()?;

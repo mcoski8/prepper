@@ -11,7 +11,10 @@ python-magic>=0.4.27
 Pillow>=10.0.0
 
 # ZIM file handling
-pyzim>=3.0.0
+libzim>=3.0.0
+
+# Compression
+zstandard>=0.22.0
 
 # Data processing
 pandas>=2.1.0
@@ -22,3 +25,6 @@ tqdm>=4.66.0
 
 # JSON processing
 jsonlines>=4.0.0
+
+# Performance profiling (optional)
+memory-profiler>=0.61.0

@@ -39,6 +39,24 @@ test-index/
 module-index/
 test-run/
 
+# Data files
+data/raw/
+data/indexes/
+data/processed*/
+data/mobile-deployment/
+*.jsonl
+*.sqlite
+*.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Test files
+test_*.py
+
 # IDE
 .vscode/
 *.swp

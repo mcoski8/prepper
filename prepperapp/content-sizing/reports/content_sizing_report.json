@@ -1,0 +1,92 @@
+{
+  "summary": {
+    "core_mb": 216.56687860903534,
+    "standard_mb": 575.8510835067086,
+    "full_mb": 3464.3310016134515,
+    "with_maps_mb": 5964.331001613451
+  },
+  "detailed_results": {
+    "wikipedia_medical": {
+      "sample_size": 299,
+      "total_articles": 29972,
+      "sample_original_mb": 27.49362850189209,
+      "sample_compressed_mb": 5.810089111328125,
+      "compression_ratio": 0.21132492973520317,
+      "extrapolated_original_mb": 2755.9833894940125,
+      "extrapolated_compressed_mb": 582.4079961362092,
+      "articles_by_priority": {
+        "0": 85,
+        "1": 117,
+        "2": 97
+      }
+    },
+    "survival_manuals": {
+      "estimated_count": 20,
+      "avg_size_mb": 7,
+      "text_extraction_ratio": 0.8,
+      "compression_ratio": 0.25,
+      "estimated_original_mb": 112.0,
+      "estimated_compressed_mb": 28.0
+    },
+    "maps": {
+      "coverage_mb": {
+        "Home State": 500,
+        "Neighboring States": 1000,
+        "Major Cities": 500,
+        "Rural Areas": 500
+      },
+      "total_mb": 2500,
+      "format": "MBTiles (vector)",
+      "compression": "Already optimized"
+    },
+    "images": {
+      "categories": {
+        "CPR/First Aid Diagrams": {
+          "count": 50,
+          "avg_size_kb": 200
+        },
+        "Anatomy References": {
+          "count": 100,
+          "avg_size_kb": 300
+        },
+        "Wound Care Photos": {
+          "count": 200,
+          "avg_size_kb": 150
+        },
+        "Plant ID (poisonous)": {
+          "count": 500,
+          "avg_size_kb": 100
+        },
+        "Emergency Procedures": {
+          "count": 100,
+          "avg_size_kb": 250
+        }
+      },
+      "total_images": 950,
+      "original_mb": 141.6015625,
+      "compressed_mb": 127.44140625
+    },
+    "other_content": {
+      "items": {
+        "Where There Is No Doctor": 50,
+        "Where There Is No Dentist": 30,
+        "Red Cross First Aid": 20,
+        "Edible Plants Guides": 100,
+        "Radio/Comms Guides": 40,
+        "Water Purification": 20,
+        "Shelter Building": 30
+      },
+      "original_mb": 290,
+      "compressed_mb": 87.0
+    },
+    "search_index": {
+      "text_content_mb": 697.4079961362092,
+      "basic_index_mb": 139.48159922724184,
+      "full_index_mb": 278.9631984544837,
+      "current_approach": "basic"
+    }
+  },
+  "recommendations": {
+    "architecture": "LARGE_APP"
+  }
+}

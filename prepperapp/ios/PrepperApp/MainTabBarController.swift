@@ -91,6 +91,16 @@ class MainTabBarController: UITabBarController {
             controllers.append(browseNav)
         }
         
+        // Add downloads tab (always present for content management)
+        let downloadsVC = DownloadManagerViewController()
+        downloadsVC.tabBarItem = UITabBarItem(
+            title: "Downloads",
+            image: UIImage(systemName: "arrow.down.circle"),
+            selectedImage: UIImage(systemName: "arrow.down.circle.fill")
+        )
+        let downloadsNav = UINavigationController(rootViewController: downloadsVC)
+        controllers.append(downloadsNav)
+        
         // Add maps tab if available
         if manifest.content.features.offlineMaps && controllers.count < 5 {
             let mapsVC = UIViewController() // Placeholder

@@ -4,6 +4,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var backgroundSessionCompletionHandler: (() -> Void)?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -45,5 +46,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         // Handle memory warning - clear caches if needed
         print("PrepperApp: Memory warning received")
+    }
+    
+    // MARK: - Background Downloads
+    
+    func application(_ application: UIApplication, 
+                     handleEventsForBackgroundURLSession identifier: String,
+                     completionHandler: @escaping () -> Void) {
+        // Store the completion handler to be called when downloads finish
+        backgroundSessionCompletionHandler = completionHandler
+        
+        // The ContentDownloadManager will call this handler when all downloads complete
+        print("PrepperApp: Handling background download events for session: \(identifier)")
     }
 }

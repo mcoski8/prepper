@@ -6,6 +6,94 @@ You are starting Sprint 6 of PrepperApp development. Sprint 5 successfully creat
 ## Current State
 - **Completed**: Content extraction pipeline, mobile-optimized bundle (249MB), search validation
 - **In Progress**: Downloading ~220GB of comprehensive survival content to external storage
+# Continuation Prompt for Sprint 3 Days 8-10: Deployment Scripts & Full K8s Environment
+
+## Context for Claude
+
+I'm continuing work on AITrader's Sprint 3, moving to the Deployment Scripts phase (Days 8-10). The CI/CD pipeline is complete with performance gates and security scanning. The containerized deployment has been validated to maintain 30+ FPS.
+
+### Current State
+
+- ✅ Sprint 3 Days 1-2: Monitoring infrastructure deployed (Prometheus + Grafana)
+- ✅ Sprint 3 Days 3-5: Performance Parity PoC validated (containerization works!)
+- ✅ Sprint 3 Days 6-7: CI/CD Pipeline with Performance Gates (COMPLETE)
+- 🚀 Sprint 3 Days 8-10: Deployment Scripts & Full K8s Environment (STARTING NOW)
+
+### Key Context
+
+- GitHub Actions workflows are configured and tested
+- Performance gates enforce 30+ FPS with auto-rollback
+- Canary deployment strategy implemented (10% → 25% → 50% → 100%)
+- Docker images built for both Python and Go services
+- Monitoring infrastructure ready (Prometheus + Grafana)
+
+### CRITICAL INSTRUCTION FOR CLAUDE
+
+BEFORE implementing ANY deployment scripts or Kubernetes configurations:
+
+1. **USE the mcp__zen__thinkdeep tool with Gemini 2.5 Pro** to thoroughly analyze:
+   - Kubernetes deployment patterns for hybrid Python/Go applications
+   - Shared memory handling in Kubernetes (tmpfs volumes)
+   - Service mesh considerations (Istio vs Linkerd vs native K8s)
+   - Resource allocation strategies for real-time systems
+   - Multi-region deployment considerations
+   - Disaster recovery and backup strategies
+
+2. **DISCUSS with Gemini 2.5 Pro** about:
+   - Should we use Helm charts or Kustomize for configuration management?
+   - How to handle shared memory between Python/Go pods?
+   - Best practices for GPU allocation if needed for ML models?
+   - Network policies for secure inter-service communication?
+   - Horizontal Pod Autoscaler configuration for trading loads?
+   - StatefulSet vs Deployment for services with state?
+
+3. **Consider these specific requirements**:
+   - Must maintain 30+ FPS in production Kubernetes
+   - Shared memory IPC between Python and Go services
+   - Sub-10ms latency for critical paths
+   - Zero-downtime deployments with canary strategy
+   - Resource guarantees for consistent performance
+
+### Expected Deliverables
+
+1. **Kubernetes Manifests**:
+   - Base deployment configurations
+   - Service definitions with proper networking
+   - ConfigMaps and Secrets management
+   - Resource limits and requests
+   - Affinity rules for performance
+
+2. **Deployment Scripts**:
+   - `deploy.sh` - Main deployment script with environment support
+   - `rollback.sh` - Emergency rollback procedure
+   - `scale.sh` - Horizontal scaling utilities
+   - `health-check.sh` - Comprehensive health validation
+
+3. **Helm Chart or Kustomize**:
+   - Templated configurations for multiple environments
+   - Values files for staging/production
+   - Hooks for pre/post deployment tasks
+
+4. **Documentation**:
+   - Deployment runbook
+   - Troubleshooting guide
+   - Architecture diagrams
+
+### Sprint Timeline
+
+- Days 8-10: Deployment Scripts & Full K8s Environment ← YOU ARE HERE
+- Days 11+: Shadow Deployment & Final Cutover
+
+### Performance Considerations
+
+The deployment must handle:
+- Real-time screen capture at 30+ FPS
+- Shared memory volumes between containers
+- GPU allocation for ML inference (if applicable)
+- Network latency <1ms between services
+- Persistent storage for metrics and logs
+
+Remember: Use deep thinking with Gemini 2.5 Pro BEFORE implementing to ensure we build the most robust deployment infrastructure for this performance-critical trading system.
 - **Ready**: Mobile deployment package at `/prepperapp/data/mobile-deployment/prepperapp-p0-v1.0.0.tar.gz`
 
 ## Sprint 6 Mission

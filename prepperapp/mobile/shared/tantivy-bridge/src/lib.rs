@@ -1,293 +1,276 @@
 use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
-use std::panic;
-use std::path::Path;
+use std::panic::catch_unwind;
 use std::ptr;
-
-use tantivy::collector::TopDocs;
-use tantivy::query::QueryParser;
-use tantivy::schema::*;
+use serde::{Serialize, Deserialize};
+use serde_json;
 use tantivy::{Index, IndexReader, ReloadPolicy};
+use tantivy::query::QueryParser;
+use tantivy::collector::TopDocs;
 
-/// Error codes matching bindings.h
-#[repr(C)]
-pub enum TantivyError {
-    Ok = 0,
-    InvalidPath = 1,
-    IndexCorrupt = 2,
-    QueryParse = 3,
-    OutOfMemory = 4,
-    Unknown = 99,
-}
-
-/// Search result structure (C-compatible)
-#[repr(C)]
-pub struct SearchResult {
-    pub article_id: *mut c_char,
-    pub title: *mut c_char,
-    pub snippet: *mut c_char,
-    pub score: f32,
-    pub priority: u32,
-}
-
-/// Search results collection
-#[repr(C)]
-pub struct SearchResults {
-    pub results: *mut SearchResult,
-    pub count: u32,
-    pub total_hits: u32,
-}
-
-/// Opaque handle for the Tantivy index
-pub struct TantivyIndex {
+// Opaque type for the searcher
+pub struct TantivySearcher {
     index: Index,
     reader: IndexReader,
-    query_parser: QueryParser,
-    schema: Schema,
 }
 
-/// Convert Rust string to C string, returning null on failure
-fn to_c_string(s: &str) -> *mut c_char {
-    match CString::new(s) {
-        Ok(c_str) => c_str.into_raw(),
-        Err(_) => ptr::null_mut(),
+// JSON response types
+#[derive(Serialize, Deserialize)]
+struct InitSuccess {
+    searcher_ptr: usize,
+}
+
+#[derive(Serialize, Deserialize)]
+struct InitResponse {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    success: Option<InitSuccess>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    error: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+struct SearchItem {
+    doc_id: String,
+    score: f32,
+    title: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    snippet: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+struct SearchResponse {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    success: Option<Vec<SearchItem>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    error: Option<String>,
+}
+
+// Helper to convert result to JSON C string
+fn to_json_cstring<T: Serialize>(value: &T) -> *mut c_char {
+    match serde_json::to_string(value) {
+        Ok(json) => match CString::new(json) {
+            Ok(cstr) => cstr.into_raw(),
+            Err(_) => {
+                let error = InitResponse {
+                    success: None,
+                    error: Some("Failed to create C string".to_string()),
+                };
+                CString::new(serde_json::to_string(&error).unwrap()).unwrap().into_raw()
+            }
+        },
+        Err(e) => {
+            let error = InitResponse {
+                success: None,
+                error: Some(format!("JSON serialization failed: {}", e)),
+            };
+            CString::new(serde_json::to_string(&error).unwrap()).unwrap().into_raw()
+        }
     }
 }
 
-/// Convert C string to Rust string
-unsafe fn from_c_str(s: *const c_char) -> Result<String, TantivyError> {
-    if s.is_null() {
-        return Err(TantivyError::InvalidPath);
-    }
-    
-    match CStr::from_ptr(s).to_str() {
-        Ok(str) => Ok(str.to_string()),
-        Err(_) => Err(TantivyError::InvalidPath),
-    }
-}
-
-/// Initialize a Tantivy index from the given path
 #[no_mangle]
-pub unsafe extern "C" fn tantivy_index_open(
-    index_path: *const c_char,
-    handle_out: *mut *mut TantivyIndex,
-) -> TantivyError {
-    // Wrap in catch_unwind to prevent panics from crossing FFI boundary
-    let result = panic::catch_unwind(|| {
-        let path_str = match from_c_str(index_path) {
-            Ok(s) => s,
-            Err(e) => return e,
+pub extern "C" fn init_searcher(path: *const c_char) -> *mut c_char {
+    catch_unwind(|| {
+        // Parse path
+        let path_str = unsafe {
+            match CStr::from_ptr(path).to_str() {
+                Ok(s) => s,
+                Err(_) => {
+                    let response = InitResponse {
+                        success: None,
+                        error: Some("Invalid UTF-8 in path".to_string()),
+                    };
+                    return to_json_cstring(&response);
+                }
+            }
         };
         
-        let path = Path::new(&path_str);
-        
-        // Open the index
-        let index = match Index::open_in_dir(path) {
+        // Open index
+        let index = match Index::open_in_dir(path_str) {
             Ok(idx) => idx,
-            Err(_) => return TantivyError::IndexCorrupt,
+            Err(e) => {
+                let response = InitResponse {
+                    success: None,
+                    error: Some(format!("Failed to open index: {}", e)),
+                };
+                return to_json_cstring(&response);
+            }
         };
         
-        // Create reader with no automatic reloading
-        let reader = match index.reader_builder()
+        // Create reader
+        let reader = match index
+            .reader_builder()
             .reload_policy(ReloadPolicy::Manual)
             .try_into() {
             Ok(r) => r,
-            Err(_) => return TantivyError::Unknown,
+            Err(e) => {
+                let response = InitResponse {
+                    success: None,
+                    error: Some(format!("Failed to create reader: {}", e)),
+                };
+                return to_json_cstring(&response);
+            }
         };
         
-        // Get schema and setup query parser
-        let schema = index.schema();
-        
-        // Assume we have a "content" field for search
-        let content_field = match schema.get_field("content") {
-            Ok(f) => f,
-            Err(_) => return TantivyError::IndexCorrupt,
-        };
-        
-        let query_parser = QueryParser::for_index(&index, vec![content_field]);
-        
-        // Create handle
-        let handle = Box::new(TantivyIndex {
+        // Create searcher struct
+        let searcher = Box::new(TantivySearcher {
             index,
             reader,
-            query_parser,
-            schema,
         });
         
-        *handle_out = Box::into_raw(handle);
-        TantivyError::Ok
-    });
-    
-    match result {
-        Ok(error) => error,
-        Err(_) => TantivyError::Unknown,
-    }
-}
-
-/// Close and free a Tantivy index
-#[no_mangle]
-pub unsafe extern "C" fn tantivy_index_close(handle: *mut TantivyIndex) {
-    if !handle.is_null() {
-        let _ = Box::from_raw(handle);
-    }
-}
-
-/// Search the index with a query string
-#[no_mangle]
-pub unsafe extern "C" fn tantivy_search(
-    handle: *mut TantivyIndex,
-    query: *const c_char,
-    max_results: u32,
-    results_out: *mut *mut SearchResults,
-) -> TantivyError {
-    if handle.is_null() || results_out.is_null() {
-        return TantivyError::Unknown;
-    }
-    
-    let result = panic::catch_unwind(|| {
-        let index = &*handle;
-        let query_str = match from_c_str(query) {
-            Ok(s) => s,
-            Err(e) => return e,
+        let ptr = Box::into_raw(searcher) as usize;
+        
+        let response = InitResponse {
+            success: Some(InitSuccess { searcher_ptr: ptr }),
+            error: None,
         };
+        
+        to_json_cstring(&response)
+    }).unwrap_or_else(|_| {
+        let response = InitResponse {
+            success: None,
+            error: Some("Panic occurred during initialization".to_string()),
+        };
+        to_json_cstring(&response)
+    })
+}
+
+#[no_mangle]
+pub extern "C" fn close_searcher(searcher_ptr: *mut TantivySearcher) {
+    if searcher_ptr.is_null() {
+        return;
+    }
+    unsafe {
+        let _ = Box::from_raw(searcher_ptr);
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn search(
+    searcher_ptr: *const TantivySearcher,
+    query: *const c_char,
+    limit: u32,
+    offset: u32,
+) -> *mut c_char {
+    catch_unwind(|| {
+        // Validate searcher pointer
+        if searcher_ptr.is_null() {
+            let response = SearchResponse {
+                success: None,
+                error: Some("Null searcher pointer".to_string()),
+            };
+            return to_json_cstring(&response);
+        }
+        
+        let searcher = unsafe { &*searcher_ptr };
         
         // Parse query
-        let query = match index.query_parser.parse_query(&query_str) {
+        let query_str = unsafe {
+            match CStr::from_ptr(query).to_str() {
+                Ok(s) => s,
+                Err(_) => {
+                    let response = SearchResponse {
+                        success: None,
+                        error: Some("Invalid UTF-8 in query".to_string()),
+                    };
+                    return to_json_cstring(&response);
+                }
+            }
+        };
+        
+        // Get searcher
+        let tantivy_searcher = searcher.reader.searcher();
+        
+        // Setup query parser
+        let schema = searcher.index.schema();
+        let default_fields = vec![
+            schema.get_field("title").unwrap(),
+            schema.get_field("content").unwrap(),
+        ];
+        
+        let query_parser = QueryParser::for_index(&searcher.index, default_fields);
+        
+        // Parse query
+        let parsed_query = match query_parser.parse_query(query_str) {
             Ok(q) => q,
-            Err(_) => return TantivyError::QueryParse,
+            Err(e) => {
+                let response = SearchResponse {
+                    success: None,
+                    error: Some(format!("Query parse error: {}", e)),
+                };
+                return to_json_cstring(&response);
+            }
         };
         
-        // Search
-        let searcher = index.reader.searcher();
-        let top_docs = match searcher.search(&query, &TopDocs::with_limit(max_results as usize)) {
+        // Search with offset
+        let collector = TopDocs::with_limit(limit as usize + offset as usize);
+        let top_docs = match tantivy_searcher.search(&parsed_query, &collector) {
             Ok(docs) => docs,
-            Err(_) => return TantivyError::Unknown,
+            Err(e) => {
+                let response = SearchResponse {
+                    success: None,
+                    error: Some(format!("Search error: {}", e)),
+                };
+                return to_json_cstring(&response);
+            }
         };
         
-        // Convert results to C-compatible format
-        let mut c_results = Vec::with_capacity(top_docs.len());
-        
-        let id_field = index.schema.get_field("id").unwrap();
-        let title_field = index.schema.get_field("title").unwrap();
-        
-        for (score, doc_address) in top_docs {
-            let doc = match searcher.doc(doc_address) {
-                Ok(d) => d,
-                Err(_) => continue,
-            };
-            
-            let id = doc.get_first(id_field)
-                .and_then(|v| v.as_str())
-                .unwrap_or("");
-            
-            let title = doc.get_first(title_field)
-                .and_then(|v| v.as_str())
-                .unwrap_or("");
-            
-            c_results.push(SearchResult {
-                article_id: to_c_string(id),
-                title: to_c_string(title),
-                snippet: to_c_string(""), // TODO: Generate snippets
-                score,
-                priority: 0, // TODO: Extract from metadata
-            });
-        }
-        
-        let results = Box::new(SearchResults {
-            results: c_results.as_mut_ptr(),
-            count: c_results.len() as u32,
-            total_hits: c_results.len() as u32, // TODO: Get actual total
-        });
-        
-        std::mem::forget(c_results); // Prevent deallocation
-        *results_out = Box::into_raw(results);
-        
-        TantivyError::Ok
-    });
-    
-    match result {
-        Ok(error) => error,
-        Err(_) => TantivyError::Unknown,
-    }
-}
-
-/// Free search results
-#[no_mangle]
-pub unsafe extern "C" fn tantivy_free_results(results: *mut SearchResults) {
-    if !results.is_null() {
-        let results = Box::from_raw(results);
-        
-        // Free individual strings
-        for i in 0..results.count {
-            let result = &*results.results.add(i as usize);
-            if !result.article_id.is_null() {
-                let _ = CString::from_raw(result.article_id);
+        // Convert results, skipping offset
+        let mut results = Vec::new();
+        for (i, (score, doc_address)) in top_docs.into_iter().enumerate() {
+            if i < offset as usize {
+                continue;
             }
-            if !result.title.is_null() {
-                let _ = CString::from_raw(result.title);
+            if i >= (offset + limit) as usize {
+                break;
             }
-            if !result.snippet.is_null() {
-                let _ = CString::from_raw(result.snippet);
+            
+            if let Ok(doc) = tantivy_searcher.doc(doc_address) {
+                // Extract fields from document
+                let doc_id = doc.get_first(schema.get_field("id").unwrap())
+                    .and_then(|v| v.as_text())
+                    .unwrap_or("unknown")
+                    .to_string();
+                    
+                let title = doc.get_first(schema.get_field("title").unwrap())
+                    .and_then(|v| v.as_text())
+                    .unwrap_or("Untitled")
+                    .to_string();
+                    
+                let snippet = doc.get_first(schema.get_field("content").unwrap())
+                    .and_then(|v| v.as_text())
+                    .map(|s| s.chars().take(200).collect::<String>() + "...");
+                
+                results.push(SearchItem {
+                    doc_id,
+                    score,
+                    title,
+                    snippet,
+                });
             }
         }
         
-        // Free results array
-        Vec::from_raw_parts(results.results, results.count as usize, results.count as usize);
-    }
-}
-
-/// Get error message
-#[no_mangle]
-pub extern "C" fn tantivy_error_message(error: TantivyError) -> *const c_char {
-    let msg = match error {
-        TantivyError::Ok => "Success\0",
-        TantivyError::InvalidPath => "Invalid index path\0",
-        TantivyError::IndexCorrupt => "Index is corrupted or incompatible\0",
-        TantivyError::QueryParse => "Failed to parse search query\0",
-        TantivyError::OutOfMemory => "Out of memory\0",
-        TantivyError::Unknown => "Unknown error\0",
-    };
-    msg.as_ptr() as *const c_char
-}
-
-/// Check index health
-#[no_mangle]
-pub unsafe extern "C" fn tantivy_index_is_healthy(handle: *mut TantivyIndex) -> bool {
-    if handle.is_null() {
-        return false;
-    }
-    
-    panic::catch_unwind(|| {
-        let index = &*handle;
-        // Try to get searcher as health check
-        let _ = index.reader.searcher();
-        true
-    }).unwrap_or(false)
-}
-
-/// Get index statistics
-#[no_mangle]
-pub unsafe extern "C" fn tantivy_index_stats(
-    handle: *mut TantivyIndex,
-    doc_count_out: *mut u64,
-    index_size_bytes_out: *mut u64,
-) -> TantivyError {
-    if handle.is_null() || doc_count_out.is_null() || index_size_bytes_out.is_null() {
-        return TantivyError::Unknown;
-    }
-    
-    let result = panic::catch_unwind(|| {
-        let index = &*handle;
-        let searcher = index.reader.searcher();
+        let response = SearchResponse {
+            success: Some(results),
+            error: None,
+        };
         
-        *doc_count_out = searcher.num_docs();
-        *index_size_bytes_out = 0; // TODO: Calculate actual size
-        
-        TantivyError::Ok
-    });
-    
-    match result {
-        Ok(error) => error,
-        Err(_) => TantivyError::Unknown,
+        to_json_cstring(&response)
+    }).unwrap_or_else(|_| {
+        let response = SearchResponse {
+            success: None,
+            error: Some("Panic occurred during search".to_string()),
+        };
+        to_json_cstring(&response)
+    })
+}
+
+#[no_mangle]
+pub extern "C" fn free_string(s: *mut c_char) {
+    if s.is_null() {
+        return;
+    }
+    unsafe {
+        let _ = CString::from_raw(s);
     }
 }

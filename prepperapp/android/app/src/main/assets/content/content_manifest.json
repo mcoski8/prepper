@@ -1,0 +1,60 @@
+{
+  "version": "1.0",
+  "type": "test",
+  "name": "PrepperApp Test Content",
+  "description": "Minimal emergency procedures for development",
+  "size_mb": 0.05,
+  "requires_external_storage": false,
+  "min_app_version": "1.0.0",
+  "created": "2025-07-19T23:06:57",
+  "content": {
+    "databases": ["test_content.db"],
+    "indexes": [],
+    "categories": [
+      "medical",
+      "water", 
+      "shelter",
+      "signaling",
+      "immediate_dangers",
+      "navigation",
+      "preparation"
+    ],
+    "article_count": 17,
+    "priority_levels": [0, 1, 2],
+    "priority_0_count": 9,
+    "features": {
+      "offline_maps": false,
+      "plant_identification": false,
+      "pill_identification": false,
+      "medical_procedures": true,
+      "survival_basics": true,
+      "emergency_signaling": true
+    }
+  },
+  "ui_config": {
+    "search_placeholder": "Search 17 emergency procedures...",
+    "home_screen_modules": [
+      {
+        "id": "quick_emergency",
+        "title": "Life-Threatening",
+        "icon": "emergency",
+        "priority": 0,
+        "queries": ["bleeding", "cpr", "choking", "shock"]
+      },
+      {
+        "id": "water_shelter",
+        "title": "Survival Basics", 
+        "icon": "water",
+        "priority": 1,
+        "queries": ["water", "hypothermia", "shelter"]
+      }
+    ],
+    "enabled_tabs": ["search", "emergency", "browse"],
+    "disabled_features": ["maps", "plant_id", "pill_id", "downloads"]
+  },
+  "search_config": {
+    "default_limit": 20,
+    "boost_priority_0": 2.0,
+    "boost_title_match": 1.5
+  }
+}

@@ -120,47 +120,37 @@ class ArticleDetailViewController: UIViewController {
     
     // MARK: - Data Loading
     private func loadArticle() {
-        // TODO: Load from ZIM file via Kiwix
-        // For now, show mock content
+        // Load article from ContentManager
+        guard let article = ContentManager.shared.getArticle(id: articleId) else {
+            showError()
+            return
+        }
         
-        titleLabel.text = "Controlling Severe Bleeding"
-        categoryLabel.text = "MEDICAL - PRIORITY 5"
+        // Update UI with article data
+        titleLabel.text = article.title
         
-        let content = """
-        IMMEDIATE ACTION REQUIRED
+        // Format category label with priority
+        let priorityText = article.priority == 0 ? "CRITICAL" : "PRIORITY \(article.priority)"
+        categoryLabel.text = "\(article.category.uppercased()) - \(priorityText)"
         
-        1. APPLY DIRECT PRESSURE
-        • Use clean cloth or gauze
-        • Press firmly on wound
-        • Do not remove cloth if blood soaks through
-        • Add more layers on top
+        // Color code based on priority
+        if article.priority == 0 {
+            categoryLabel.textColor = .systemRed
+        }
         
-        2. ELEVATE IF POSSIBLE
-        • Raise injured area above heart level
-        • Continue applying pressure
+        // Show time critical info if available
+        if let timeCritical = article.timeCritical {
+            categoryLabel.text = "\(categoryLabel.text ?? "") - \(timeCritical)"
+        }
         
-        3. PRESSURE POINTS
-        • Brachial artery (arm wounds): Inside upper arm
-        • Femoral artery (leg wounds): Groin area
-        • Press firmly against bone
-        
-        4. TOURNIQUET - LAST RESORT
-        • Only if bleeding is life-threatening
-        • Apply 2-3 inches above wound
-        • Never on a joint
-        • Tighten until bleeding stops
-        • Write time on tourniquet
-        • NEVER loosen once applied
-        
-        5. SEEK IMMEDIATE MEDICAL HELP
-        • Call emergency services
-        • Keep victim warm
-        • Monitor for shock
-        
-        WARNING: Uncontrolled bleeding can lead to death in minutes. Act quickly and decisively.
-        """
-        
-        contentTextView.text = content
+        contentTextView.text = article.content
+    }
+    
+    private func showError() {
+        titleLabel.text = "Article Not Found"
+        categoryLabel.text = "ERROR"
+        contentTextView.text = "The requested article could not be loaded. Please try searching for it instead."
+        categoryLabel.textColor = .systemRed
     }
     
     // MARK: - Actions

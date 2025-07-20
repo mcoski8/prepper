@@ -7,20 +7,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // Initialize Tantivy logging
-        tantivy_init_logging()
+        // Initialize Tantivy logging (commented out as we're using ContentManager now)
+        // tantivy_init_logging()
         
         // Create window
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        // Set up root view controller
-        let searchVC = SearchViewController()
-        let navController = UINavigationController(rootViewController: searchVC)
+        // Set up root view controller with tab bar
+        let mainTabBarController = MainTabBarController()
         
         // Configure navigation bar for OLED black theme
         configureNavigationBarAppearance()
         
-        window?.rootViewController = navController
+        window?.rootViewController = mainTabBarController
         window?.makeKeyAndVisible()
         
         // Set background color to pure black

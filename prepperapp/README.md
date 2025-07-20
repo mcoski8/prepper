@@ -2,29 +2,34 @@
 
 Offline-first survival knowledge base for iOS and Android. Designed to work with zero connectivity during emergencies.
 
-## Project Status: Content Downloads Active 🔄
+## Project Status: iOS Development Active 📱
+
+### Development Strategy Update
+Following consultation with Gemini 2.5 Pro, we've adopted an **iOS-first approach** due to:
+- Founder only has iOS devices for testing
+- iOS users are primary market
+- External storage possible on iOS (with user setup)
+- Android development deferred until after iOS success
 
 ### Completed Features
-- ✅ Rust-based Tantivy search engine with <100ms performance
-- ✅ Content extraction pipeline (29,972 medical articles)
-- ✅ Mobile-optimized bundle: **249MB** (P0 critical content)
-- ✅ Search safety validation framework
-- ✅ Automated deployment packaging
-- ✅ 88% index size reduction using Basic indexing
-- ✅ Pill identification database (46,872 FDA products)
-- ✅ External storage support for 220GB+ content
+- ✅ **iOS App Foundation** (UIKit, Tab Navigation)
+- ✅ **Content-Agnostic Architecture** (works with any size: 10MB to 220GB)
+- ✅ **Emergency UI** - Instant access to life-saving content
+- ✅ **Search & Browse** - Lightning-fast article discovery
+- ✅ **Test Content Bundle** - 17 emergency procedures (56KB)
+- ✅ **Content Manager** - Dynamic content loading system
+- ✅ **Pure Black OLED UI** - Maximum battery efficiency
 
 ### In Progress
-**Content Downloads**: Acquiring ~220GB of comprehensive survival content
-- Wikipedia (Full): 87GB 
-- Medical References: 15GB
-- Maps, Survival Guides, Reference Library: 118GB
-- Progress: ~2.8GB downloaded (1.3%)
+**Content System Enhancement**:
+- Implementing On-Demand Resources for Tier 1 (2-3GB)
+- Building module downloader for Tier 2 (1-5GB packs)
+- External storage POC for Tier 3 (220GB archive)
 
-### Latest Achievement
-**Two-Tier Architecture**: 
-- Tier 1: 249MB core app (fits on any phone)
-- Tier 2: 220GB+ external storage modules (SD card/USB)
+### Three-Tier Content Strategy
+- **Tier 1**: Essential Core (2-3GB) - Always on device
+- **Tier 2**: Adaptive Bundles (1-5GB each) - User choice
+- **Tier 3**: Complete Archive (220GB) - External storage
 
 ## Project Structure
 
@@ -51,60 +56,64 @@ prepperapp/
 ## Quick Start
 
 ### Prerequisites
-- Python 3.8+ with libzim
-- Rust toolchain (optional, for custom builds)
-- ~5GB disk space for full extraction
+- Xcode 15+ (for iOS development)
+- macOS Sonoma or later
+- iOS device or simulator (iOS 15+)
 
-### 1. Extract Medical Content
-
-```bash
-# Run the full pipeline (takes ~3 minutes)
-./SPRINT5_RUNNER.sh
-
-# Or just P0 content for mobile
-./P0_ONLY_EXTRACT.sh
-```
-
-### 2. Build Mobile Bundle
+### 1. Setup Test Content
 
 ```bash
-# Create mobile-optimized index
-./P0_MOBILE_OPTIMIZED.sh
+# Generate test content bundle
+python3 scripts/generate_test_content.py
 
-# Test search safety
-./RUN_SEARCH_SAFETY_TEST.sh
-
-# Package for deployment
-./PACKAGE_P0_MOBILE.sh
+# Copy to iOS project
+./scripts/copy_test_content_to_ios.sh
 ```
 
-### 3. Deploy to Mobile
+### 2. Open iOS Project
 
-**iOS:**
-- Include `prepperapp-p0-v1.0.0` bundle in app resources
-- Extract on first launch to Documents directory
+```bash
+# Open in Xcode
+open iOS/PrepperApp.xcodeproj
+```
 
-**Android:**
-- Add `prepperapp-p0-v1.0.0.zip` to assets
-- Extract to app files directory on first launch
+In Xcode:
+1. Add the 'Content' folder to the project (as folder reference)
+2. Select your development team
+3. Build and run (⌘R)
+
+### 3. Test Key Features
+
+- **Emergency Tab**: Quick access to priority 0 content
+- **Search Tab**: Full-text search across all articles
+- **Browse Tab**: Explore by category
+
+### 4. Android (Future)
+
+Android development is deferred until after iOS validation. The foundation is ready:
+- Content-agnostic architecture
+- Test content bundle
+- Basic project structure
 
 ## Architecture
 
-### Search Engine
-- **Tantivy** (Rust): Full-text search with <100ms query time
-- **Schema**: Optimized for mobile with FAST fields
-- **Indexes**: Memory-mapped for efficiency
+### iOS Implementation
+- **UIKit**: Traditional views for stability and performance
+- **ContentManager**: Discovers and loads content from multiple sources
+- **SQLite**: Direct queries for lightning-fast search
+- **Tab Navigation**: Emergency, Search, Browse
 
-### Mobile Integration
-- **iOS**: Swift + C FFI bridge
-- **Android**: Kotlin + JNI bridge
-- **Thread-safe**: Concurrent search, exclusive writes
+### Content System
+- **Manifest-Driven**: JSON manifests describe available content
+- **Multi-Source**: Bundled, Documents, App Group, External Storage
+- **Dynamic UI**: Features enable/disable based on content
+- **Fallback**: Always has minimal emergency content
 
-### Content Pipeline
-1. **Acquisition**: Wikipedia medical, military manuals
-2. **Processing**: Extract, categorize, prioritize
-3. **Indexing**: Tantivy with pre-built indexes
-4. **Distribution**: Core (<1GB) + Modules (1-5GB)
+### Content Sources Priority
+1. **Test Bundle**: 56KB development content
+2. **Downloaded**: Future Tier 1/2 content
+3. **External**: Future Tier 3 via USB/Lightning
+4. **Fallback**: 5 hardcoded emergency procedures
 
 ## Performance
 
@@ -131,11 +140,11 @@ prepperapp/
 ## Development
 
 See `/docs` for detailed documentation:
-- Architecture decisions
-- Search implementation
-- UI/UX guidelines
-- Content curation
-- FFI integration guide
+- [iOS-First Strategy](docs/development/ios-first-strategy.md)
+- [Content-Agnostic Architecture](docs/architecture/content-agnostic-design.md)
+- [Content Acquisition Plan](docs/content/content-acquisition.md)
+- UI/UX Guidelines
+- Sprint Tracking
 
 ## Testing
 

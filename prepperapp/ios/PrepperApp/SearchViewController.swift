@@ -18,6 +18,7 @@ class SearchViewController: UIViewController {
         setupConstraints()
         configureSearchBar()
         configureTableView()
+        loadContent()
     }
     
     // MARK: - UI Setup
@@ -98,62 +99,76 @@ class SearchViewController: UIViewController {
         tableView.estimatedRowHeight = 80
     }
     
+    // MARK: - Content Loading
+    private func loadContent() {
+        // Show loading state
+        emptyStateLabel.text = "Loading emergency content..."
+        emptyStateLabel.isHidden = false
+        
+        ContentManager.shared.discoverContent { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let bundle):
+                print("Loaded content: \(bundle.manifest.name) (\(bundle.manifest.content.articleCount) articles)")
+                
+                // Update search placeholder based on manifest
+                self.searchBar.placeholder = bundle.manifest.uiConfig.searchPlaceholder
+                
+                // Update empty state
+                self.emptyStateLabel.text = "Search for critical survival information"
+                self.emptyStateLabel.isHidden = true
+                
+                // Focus search bar
+                self.searchBar.becomeFirstResponder()
+                
+            case .failure(let error):
+                print("Failed to load content: \(error)")
+                self.emptyStateLabel.text = "Failed to load content. Using emergency basics."
+                self.emptyStateLabel.isHidden = false
+            }
+        }
+    }
+    
     // MARK: - Search
     private func performSearch(query: String) {
         guard !query.isEmpty else {
             searchResults = []
             tableView.reloadData()
             emptyStateLabel.isHidden = false
+            emptyStateLabel.text = "Search for critical survival information"
             return
         }
         
         isSearching = true
         emptyStateLabel.isHidden = true
         
-        Task {
-            do {
-                // Initialize index if needed
-                if !isIndexInitialized {
-                    try await TantivyIndexManager.shared.initializeCoreIndex()
-                    isIndexInitialized = true
-                }
-                
-                // Perform search
-                let results = try await TantivyIndexManager.shared.search(query: query, limit: 20)
-                
-                // Convert to UI model
-                let uiResults = results.map { result in
-                    SearchResultItem(
-                        id: result.id,
-                        title: result.title,
-                        category: result.category,
-                        summary: result.summary,
-                        priority: result.priority,
-                        score: result.score
-                    )
-                }
-                
-                await MainActor.run {
-                    self.isSearching = false
-                    self.searchResults = uiResults
-                    self.tableView.reloadData()
-                    self.emptyStateLabel.isHidden = !uiResults.isEmpty
-                }
-                
-            } catch {
-                print("Search error: \(error)")
-                await MainActor.run {
-                    self.isSearching = false
-                    self.searchResults = []
-                    self.tableView.reloadData()
-                    self.emptyStateLabel.text = "Search failed. Please try again."
-                    self.emptyStateLabel.isHidden = false
-                }
-            }
+        // Use ContentManager for search
+        let results = ContentManager.shared.search(query: query, limit: 20)
+        
+        // Convert to UI model
+        let uiResults = results.map { result in
+            SearchResultItem(
+                id: result.article.id,
+                title: result.article.title,
+                category: result.article.category,
+                summary: result.snippet ?? String(result.article.content.prefix(150)) + "...",
+                priority: result.article.priority,
+                score: result.score
+            )
+        }
+        
+        self.isSearching = false
+        self.searchResults = uiResults
+        self.tableView.reloadData()
+        
+        if uiResults.isEmpty {
+            self.emptyStateLabel.text = "No results found for '\(query)'"
+            self.emptyStateLabel.isHidden = false
+        } else {
+            self.emptyStateLabel.isHidden = true
         }
     }
-    
-    private var isIndexInitialized = false
 }
 
 // MARK: - UISearchBarDelegate

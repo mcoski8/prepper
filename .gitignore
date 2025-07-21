@@ -9,8 +9,17 @@
 data/zim/
 data/maps/
 data/content/
+data/indexes/
+data/processed*/
 downloads/
 content-downloads/
+
+# PrepperApp specific large files
+prepperapp/data/processed*/
+prepperapp/data/mobile-deployment/*.tar.gz
+prepperapp/data/mobile-deployment/*.zip
+prepperapp/data/indexes/
+prepperapp/rust/*/target/
 
 # OS Files
 .DS_Store

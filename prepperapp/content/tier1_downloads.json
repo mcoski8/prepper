@@ -1,0 +1,169 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "generated": "2025-07-30",
+    "description": "Tier 1 critical content downloads for PrepperApp MVP",
+    "total_estimated_size_gb": 20
+  },
+  "downloads": [
+    {
+      "id": "post-disaster-guide",
+      "filename": "zimgit-post-disaster_en_2024-05.zim",
+      "url": "https://download.kiwix.org/zim/other/zimgit-post-disaster_en_2024-05.zim",
+      "category": "survival",
+      "size_bytes": 644874240,
+      "size_human": "615MB",
+      "priority": "critical",
+      "description": "Post-disaster survival content specifically designed for emergency scenarios"
+    },
+    {
+      "id": "water-purification",
+      "filename": "zimgit-water_en_2024-08.zim",
+      "url": "https://download.kiwix.org/zim/other/zimgit-water_en_2024-08.zim",
+      "category": "survival",
+      "size_bytes": 20971520,
+      "size_human": "20MB",
+      "priority": "critical",
+      "description": "Water purification and safety - #1 survival priority"
+    },
+    {
+      "id": "medicine-collection",
+      "filename": "zimgit-medicine_en_2024-08.zim",
+      "url": "https://download.kiwix.org/zim/other/zimgit-medicine_en_2024-08.zim",
+      "category": "medical",
+      "size_bytes": 70254592,
+      "size_human": "67MB",
+      "priority": "critical",
+      "description": "General medicine content for emergency medical reference"
+    },
+    {
+      "id": "wikipedia-medical-maxi",
+      "filename": "wikipedia_en_medicine_maxi_2025-07.zim",
+      "url": "https://download.kiwix.org/zim/wikipedia/wikipedia_en_medicine_maxi_2025-07.zim",
+      "category": "medical",
+      "size_bytes": 2147483648,
+      "size_human": "2.0GB",
+      "priority": "high",
+      "description": "Comprehensive Wikipedia medical subset (full maxi version)"
+    },
+    {
+      "id": "energypedia",
+      "filename": "energypedia_en_all_maxi_2025-06.zim",
+      "url": "https://download.kiwix.org/zim/other/energypedia_en_all_maxi_2025-06.zim",
+      "category": "energy",
+      "size_bytes": 112197632,
+      "size_human": "107MB",
+      "priority": "medium",
+      "description": "Off-grid energy solutions and renewable power information"
+    },
+    {
+      "id": "appropedia",
+      "filename": "appropedia_en_all_maxi_2025-05.zim",
+      "url": "https://download.kiwix.org/zim/other/appropedia_en_all_maxi_2025-05.zim",
+      "category": "homesteading",
+      "size_bytes": 1153433600,
+      "size_human": "1.1GB",
+      "priority": "medium",
+      "description": "Appropriate technology and sustainability guides"
+    },
+    {
+      "id": "usda-plants-db",
+      "filename": "plantlst.txt",
+      "url": "https://plants.usda.gov/assets/docs/CompletePLANTSList/plantlst.txt",
+      "category": "plants",
+      "size_bytes": 5242880,
+      "size_human": "5MB",
+      "priority": "high",
+      "description": "USDA PLANTS database list for plant identification"
+    },
+    {
+      "id": "usda-plants-characteristics",
+      "filename": "CompleteCharacteristics.csv",
+      "url": "https://plants.usda.gov/assets/docs/CompletePLANTSList/CompleteCharacteristics.csv",
+      "category": "plants",
+      "size_bytes": 20971520,
+      "size_human": "20MB",
+      "priority": "high",
+      "description": "USDA plant characteristics database"
+    },
+    {
+      "id": "poisonous-plants-guide",
+      "filename": "PoisonousPlants.pdf",
+      "url": "https://www.ars.usda.gov/ARSUserFiles/oc/np/PoisonousPlants/PoisonousPlants.pdf",
+      "category": "plants",
+      "size_bytes": 10485760,
+      "size_human": "10MB",
+      "priority": "critical",
+      "description": "USDA guide to poisonous plants - safety critical"
+    },
+    {
+      "id": "fcc-amateur-radio-db",
+      "filename": "l_amat.zip",
+      "url": "https://data.fcc.gov/download/public/uls/complete/l_amat.zip",
+      "category": "communications",
+      "size_bytes": 157286400,
+      "size_human": "150MB",
+      "priority": "medium",
+      "description": "FCC amateur radio database for emergency communications"
+    },
+    {
+      "id": "where-there-is-no-doctor",
+      "filename": "where_there_is_no_doctor_2021.pdf",
+      "url": "https://store.hesperian.org/prod/downloads/B010R_wtnd_2021.pdf",
+      "category": "medical",
+      "size_bytes": 52428800,
+      "size_human": "50MB",
+      "priority": "high",
+      "description": "Essential medical guide for areas without doctors"
+    },
+    {
+      "id": "where-there-is-no-dentist",
+      "filename": "where_there_is_no_dentist_2021.pdf",
+      "url": "https://store.hesperian.org/prod/downloads/B012R_wtndentist_2021.pdf",
+      "category": "medical",
+      "size_bytes": 52428800,
+      "size_human": "50MB",
+      "priority": "medium",
+      "description": "Dental care guide for emergency situations"
+    }
+  ],
+  "wikihow_content": {
+    "note": "WikiHow content requires special acquisition strategy",
+    "total_articles_needed": 10000,
+    "categories": {
+      "medical_first_aid": 2000,
+      "home_emergencies": 2000,
+      "food_water": 1500,
+      "shelter_warmth": 1500,
+      "communication_navigation": 1000,
+      "power_light": 1000,
+      "security_safety": 1000
+    },
+    "acquisition_options": [
+      "Direct licensing negotiation with WikiHow",
+      "Fair use curation of specific articles",
+      "Web scraping with legal review"
+    ]
+  },
+  "plant_images": {
+    "note": "Plant images require API access and careful curation",
+    "sources": [
+      "USDA PLANTS Database",
+      "iNaturalist API (research grade only)",
+      "Regional extension office databases"
+    ],
+    "priority_focus": "Poisonous plants first, then common edibles",
+    "total_images_needed": 5000,
+    "resolution_minimum": "2048x2048"
+  },
+  "quick_reference_cards": {
+    "note": "To be generated from downloaded content",
+    "total_cards_needed": 200,
+    "categories": [
+      "Medical emergencies",
+      "Basic survival",
+      "Home emergencies"
+    ],
+    "format": "PDF optimized for printing"
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "downloads": [
+    {
+      "id": "ifixit-repair-guides",
+      "filename": "ifixit_en_all_2025-06.zim",
+      "url": "https://download.kiwix.org/zim/ifixit/ifixit_en_all_2025-06.zim",
+      "category": "repair",
+      "tier": 2,
+      "size_bytes": 3435973837,
+      "size_readable": "3.2GB",
+      "description": "iFixit repair guides for equipment maintenance"
+    },
+    {
+      "id": "wikiversity-educational",
+      "filename": "wikiversity_en_all_nopic_2025-06.zim",
+      "url": "https://download.kiwix.org/zim/wikiversity/wikiversity_en_all_nopic_2025-06.zim",
+      "category": "education",
+      "tier": 2,
+      "size_bytes": 1610612736,
+      "size_readable": "1.5GB",
+      "description": "Wikiversity educational content without images"
+    },
+    {
+      "id": "appropedia-sustainability",
+      "filename": "appropedia_en_all_maxi_2025-05.zim",
+      "url": "https://download.kiwix.org/zim/other/appropedia_en_all_maxi_2025-05.zim",
+      "category": "homesteading",
+      "tier": 2,
+      "size_bytes": 209715200,
+      "size_readable": "200MB",
+      "description": "Appropriate technology and sustainable living"
+    },
+    {
+      "id": "wikibooks-howto",
+      "filename": "wikibooks_en_all_maxi_2025-06.zim",
+      "url": "https://download.kiwix.org/zim/wikibooks/wikibooks_en_all_maxi_2025-06.zim",
+      "category": "reference",
+      "tier": 3,
+      "size_bytes": 4613734195,
+      "size_readable": "4.3GB",
+      "description": "Wikibooks how-to guides and references"
+    },
+    {
+      "id": "wikihow-instructions",
+      "filename": "wikihow_en_maxi_2025-06.zim",
+      "url": "https://download.kiwix.org/zim/wikihow/wikihow_en_maxi_2025-06.zim",
+      "category": "howto",
+      "tier": 3,
+      "size_bytes": 10737418240,
+      "size_readable": "10GB",
+      "description": "WikiHow step-by-step instructions"
+    },
+    {
+      "id": "energypedia-offgrid",
+      "filename": "energypedia_en_all_maxi_2025-06.zim",
+      "url": "https://download.kiwix.org/zim/other/energypedia_en_all_maxi_2025-06.zim",
+      "category": "energy",
+      "tier": 2,
+      "size_bytes": 104857600,
+      "size_readable": "100MB",
+      "description": "Off-grid energy solutions and renewable power"
+    },
+    {
+      "id": "osm-north-america",
+      "filename": "north-america-latest.osm.pbf",
+      "url": "https://download.geofabrik.de/north-america-latest.osm.pbf",
+      "category": "maps",
+      "tier": 2,
+      "size_bytes": 12884901888,
+      "size_readable": "12GB",
+      "description": "OpenStreetMap data for North America"
+    },
+    {
+      "id": "osm-europe",
+      "filename": "europe-latest.osm.pbf",
+      "url": "https://download.geofabrik.de/europe-latest.osm.pbf",
+      "category": "maps",
+      "tier": 3,
+      "size_bytes": 26843545600,
+      "size_readable": "25GB",
+      "description": "OpenStreetMap data for Europe"
+    },
+    {
+      "id": "osm-asia",
+      "filename": "asia-latest.osm.pbf",
+      "url": "https://download.geofabrik.de/asia-latest.osm.pbf",
+      "category": "maps",
+      "tier": 3,
+      "size_bytes": 11811160064,
+      "size_readable": "11GB",
+      "description": "OpenStreetMap data for Asia"
+    },
+    {
+      "id": "osm-south-america",
+      "filename": "south-america-latest.osm.pbf",
+      "url": "https://download.geofabrik.de/south-america-latest.osm.pbf",
+      "category": "maps",
+      "tier": 3,
+      "size_bytes": 2684354560,
+      "size_readable": "2.5GB",
+      "description": "OpenStreetMap data for South America"
+    },
+    {
+      "id": "osm-africa",
+      "filename": "africa-latest.osm.pbf",
+      "url": "https://download.geofabrik.de/africa-latest.osm.pbf",
+      "category": "maps",
+      "tier": 3,
+      "size_bytes": 3758096384,
+      "size_readable": "3.5GB",
+      "description": "OpenStreetMap data for Africa"
+    },
+    {
+      "id": "osm-australia-oceania",
+      "filename": "australia-oceania-latest.osm.pbf",
+      "url": "https://download.geofabrik.de/australia-oceania-latest.osm.pbf",
+      "category": "maps",
+      "tier": 3,
+      "size_bytes": 1073741824,
+      "size_readable": "1GB",
+      "description": "OpenStreetMap data for Australia and Oceania"
+    },
+    {
+      "id": "where-no-doctor",
+      "filename": "where_there_is_no_doctor.pdf",
+      "url": "https://store.hesperian.org/prod/downloads/B010R_wtnd_2021.pdf",
+      "category": "medical",
+      "tier": 1,
+      "size_bytes": 52428800,
+      "size_readable": "50MB",
+      "description": "Where There Is No Doctor - Medical guide for remote areas"
+    },
+    {
+      "id": "where-no-dentist",
+      "filename": "where_there_is_no_dentist.pdf",
+      "url": "https://store.hesperian.org/prod/downloads/B012R_wtndentist_2021.pdf",
+      "category": "medical",
+      "tier": 1,
+      "size_bytes": 52428800,
+      "size_readable": "50MB",
+      "description": "Where There Is No Dentist - Dental care in remote areas"
+    },
+    {
+      "id": "army-survival-fm21-76",
+      "filename": "FM21-76_SurvivalManual.pdf",
+      "url": "https://archive.org/download/FM21-76SurvivalManual/FM21-76.pdf",
+      "category": "military",
+      "tier": 1,
+      "size_bytes": 31457280,
+      "size_readable": "30MB",
+      "description": "US Army Survival Manual FM 21-76"
+    },
+    {
+      "id": "first-aid-tc4-02",
+      "filename": "TC_4-02.1_FirstAid.pdf",
+      "url": "https://archive.org/download/FirstAidTC4-02.1/TC_4-02.1.pdf",
+      "category": "military",
+      "tier": 1,
+      "size_bytes": 20971520,
+      "size_readable": "20MB",
+      "description": "US Army First Aid Manual TC 4-02.1"
+    }
+  ],
+  "metadata": {
+    "total_files": 16,
+    "total_size_bytes": 78790461901,
+    "total_size_readable": "73.4GB",
+    "already_downloaded": [
+      "wikipedia_en_all_maxi_2024-01.zim",
+      "wikipedia_en_medicine_maxi_2025-07.zim",
+      "zimgit-medicine_en_2024-08.zim",
+      "zimgit-post-disaster_en_2024-05.zim",
+      "zimgit-water_en_2024-08.zim"
+    ],
+    "categories": {
+      "repair": 1,
+      "education": 1,
+      "homesteading": 1,
+      "reference": 1,
+      "howto": 1,
+      "energy": 1,
+      "maps": 6,
+      "medical": 2,
+      "military": 2
+    }
+  }
+}

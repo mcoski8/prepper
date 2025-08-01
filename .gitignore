@@ -181,3 +181,6 @@ site/
 .tern-port
 .venv/
 .env.test
+
+# Test extraction output
+prepperapp/content/scripts/test_extraction/
